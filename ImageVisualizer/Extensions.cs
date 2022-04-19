@@ -28,7 +28,7 @@ namespace ImageVisualizer
 {
     public static class Extensions
     {
-        public static int Between(this int num, int min, int max)
+        public static double Between(this double num, double min, double max)
         {
             if (num <= min) return min;
             if (num >= max) return max;

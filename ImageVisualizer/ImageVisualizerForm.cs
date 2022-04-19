@@ -32,13 +32,13 @@ namespace ImageVisualizer
 {
     public partial class ImageVisualizerForm : Form
     {
-        private const int MaxZoom = 10;
+        private const int MaxZoom = 2;
 
         public Image Image { get; private set; }
 
-        private int zoom = 1;
+        private double zoom = 0.1;
 
-        public int Zoom
+        public double Zoom
         {
             get
             {
@@ -46,10 +46,9 @@ namespace ImageVisualizer
             }
             private set
             {
-                int tempZoom = value.Between(1, MaxZoom);
+                double tempZoom = value.Between(0.1, MaxZoom);
 
                 tsddbZoom.Text = $"Zoom: {tempZoom * 100}%";
-
                 if (tempZoom != zoom)
                 {
                     zoom = tempZoom;
@@ -75,10 +74,13 @@ namespace ImageVisualizer
             tsMain.Renderer = new CustomToolStripProfessionalRenderer();
             tsddbZoom.HideImageMargin();
 
-            for (int i = 0; i < MaxZoom; i++)
+            for (double i = 0; i <= MaxZoom; i += 0.1)
             {
-                int currentZoom = i + 1;
+                double currentZoom = i + 0.1;
                 ToolStripMenuItem tsmi = new ToolStripMenuItem(currentZoom * 100 + "%");
+
+                //Todo if zoom ratio large 2, every time incress 1
+
                 tsmi.Click += (sender, e) => Zoom = currentZoom;
                 tsddbZoom.DropDownItems.Add(tsmi);
             }
@@ -109,8 +111,8 @@ namespace ImageVisualizer
         private Bitmap RenderPreview(Image img)
         {
             int lineSize = 2;
-            int previewWidth = img.Width * Zoom;
-            int previewHeight = img.Height * Zoom;
+            int previewWidth = (int)Math.Round(img.Width * Zoom);
+            int previewHeight = (int)Math.Round(img.Height * Zoom);
 
             Bitmap bmpPreview = new Bitmap(previewWidth + lineSize * 2, previewHeight + lineSize * 2, PixelFormat.Format24bppRgb);
 
